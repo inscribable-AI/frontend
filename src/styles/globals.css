@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Base theme colors */
+  :root {
+    --background-primary: #ffffff;
+    --background-secondary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-color: #e5e7eb;
+  }
+
+  /* Dark mode colors */
+  .dark {
+    --background-primary: #111827;
+    --background-secondary: #1f2937;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+  }
+}
+
+/* Global styles */
+body {
+  @apply bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+}
+
+/* Card and container styles */
+.card {
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm;
+}
+
+/* Input styles */
+input, select, textarea {
+  @apply bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600;
+}
+
+/* Table styles */
+table {
+  @apply bg-white dark:bg-gray-800;
+}
+
+th {
+  @apply bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400;
+}
+
+td {
+  @apply text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
+
+/* Modal styles */
+.modal {
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700;
+}
+
+/* Navigation styles */
+.nav-link {
+  @apply text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white;
+}
+
+.nav-link-active {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+/* Status indicators */
+.status-active {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+.status-inactive {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+}
+
+/* Dropdown menus */
+.dropdown-menu {
+  @apply bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg;
+}
+
+.dropdown-item {
+  @apply text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700;
+}
+
+/* Form elements */
+.form-label {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.form-input {
+  @apply bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400;
+}
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-blue {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
+}
+
+.badge-gray {
+  @apply bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200;
+}
+
+/* Tooltip styles */
+.tooltip {
+  @apply bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900;
+}
+
+/* Alert styles */
+.alert {
+  @apply rounded-lg p-4 mb-4;
+}
+
+.alert-info {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200;
+}
+
+.alert-warning {
+  @apply bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200;
+}
+
+.alert-error {
+  @apply bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200;
+}
+
+.alert-success {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+} 
