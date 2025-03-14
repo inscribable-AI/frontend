@@ -30,6 +30,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
   const [lastMessageId, setLastMessageId] = useState(null);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const currentThreadIdRef = useRef(null);
+  const [isAgentTyping, setIsAgentTyping] = useState(false);
 
   const handleTaskClick = () => {
     setIsTaskMode(!isTaskMode);
@@ -182,10 +183,23 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
       const chatHistory = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      }));
-      console.log('chatHistory', chatHistory);
-      
+      }));    
       setChats(chatHistory);
+      
+      // After fetching chat history, select the most recent chat
+      if (chatHistory.length > 0) {
+        const mostRecentChat = chatHistory[0]; // First chat is the most recent due to orderBy('createdAt', 'desc')
+        
+        // Set the current chat ID and thread ID
+        setCurrentChatId(mostRecentChat.id);
+        setThreadId(mostRecentChat.threadId);
+        
+        // Set the messages from the most recent chat
+        setMessages(mostRecentChat.messages || []);
+        
+        // Scroll to bottom after a short delay
+        setTimeout(() => scrollToBottom(), 100);
+      }
     } catch (error) {
       console.error('Error fetching chat history:', error);
       toast.error('Failed to load chat history');
@@ -201,7 +215,6 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
     setCurrentChatId(null);
     // Clear the session thread ID reference
     currentThreadIdRef.current = null;
-    console.log("Started new chat, cleared thread ID reference");
   };
 
   const handleChatSelect = async (chatId) => {
@@ -219,9 +232,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
   useEffect(() => {
     // Don't do anything if we don't have a current chat ID
     if (!currentChatId) return;
-    
-    console.log("Setting up real-time listener for chat:", currentChatId);
-    
+      
     // Set up a real-time listener for the current chat document
     const chatDocRef = doc(db, 'chats', currentChatId);
     
@@ -229,8 +240,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
     const unsubscribe = onSnapshot(chatDocRef, (doc) => {
       if (doc.exists()) {
         const chatData = doc.data();
-        console.log("Real-time update received:", chatData);
-        
+      
         if (chatData.messages) {
           // Update messages in real-time
           setMessages(chatData.messages);
@@ -245,12 +255,11 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
     
     // Clean up function to remove the listener when component unmounts or chat changes
     return () => {
-      console.log("Removing real-time listener");
       unsubscribe();
     };
   }, [currentChatId]); // Re-run when currentChatId changes
 
-  // Modify handleSendMessage to prevent resetting
+  // Modify handleSendMessage to include fetchChatHistory
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const messageText = inputMessage.trim();
@@ -260,47 +269,78 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
     setInputMessage('');
     
     try {
-      // Prevent resetting by storing the current chat ID
-      const currentChat = currentChatId;
-      
       // Create a new message object
       const newMessage = {
         content: messageText,
         is_from_user: true,
         sender_id: currentUser?.id || 'default-user',
         sender_name: currentUser?.name || 'User',
-        thread_id: currentChat, // Use the stored currentChat
+        thread_id: currentChatId,
         timestamp: new Date(),
-        status: 'sending'
+        status: 'sending',
+        id: `temp-${Date.now()}`, // Add a temporary ID
+        sender: 'User',
+        message: messageText, // Important: add message property as that's what the rendering code uses
       };
       
-      // Use existing messages as a base to prevent reset
-      const existingMessages = [...messages];
+      // Add the user message to the local state IMMEDIATELY regardless of currentChatId
+      setMessages(prev => [...prev, newMessage]);
       
-      // Optimistically add message to UI
-      const tempId = Date.now().toString();
-      const tempMessage = { ...newMessage, id: tempId };
-      setMessages([...existingMessages, tempMessage]);
+      // Show agent typing indicator
+      setTimeout(() => {
+        setIsAgentTyping(true);
+      }, 500);
       
       // Use the sendMessage function to send the message
       const { threadId, taskId } = await sendMessage(newMessage);
       
-      // Only update the thread ID if it's a new chat
-      if (!currentChat && threadId) {
+      // If we got a threadId from the response and there's no current chat, update it
+      if (threadId && !currentChatId) {
         setCurrentChatId(threadId);
         setThreadId(threadId);
       }
       
-      // No need to call fetchChatHistory or reloadCurrentChatMessages
-      // The real-time listener will handle updates
+      // After sending the message, refresh the chat history
+      await fetchChatHistory();
+      
+      // If we have a currentChatId, also fetch the latest messages for this chat
+      if (currentChatId) {
+        // Fetch the latest messages for this specific chat
+        try {
+          const chatDocRef = doc(db, 'chats', currentChatId);
+          const chatDoc = await getDoc(chatDocRef);
+          if (chatDoc.exists()) {
+            const chatData = chatDoc.data();
+            if (chatData.messages) {
+              setMessages(chatData.messages);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching latest messages:', error);
+        }
+      }
       
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error('Failed to send message. Please try again.');
+      // Remove typing indicator if there's an error
+      setIsAgentTyping(false);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  // Add effect to monitor and remove typing indicator when new message arrives
+  useEffect(() => {
+    if (messages.length > 0 && isAgentTyping) {
+      // Check if the last message is from the agent
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.sender !== 'User' && !lastMessage.is_from_user) {
+        // If we get an agent message, remove the typing indicator
+        setIsAgentTyping(false);
+      }
+    }
+  }, [messages, isAgentTyping]);
   
   // Also modify sendMessage to avoid state resets
   const sendMessage = async (messageData) => {
@@ -528,12 +568,12 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
             ) : messages && messages.length > 0 ? (
               <div className="space-y-3">
                 {messages
-                  .filter(msg => msg && msg.message && msg.message.trim() !== '')  // Filter out empty messages
+                  .filter(msg => msg && ((msg.message && msg.message.trim() !== '') || msg.content))
                   .map((msg) => {
                     // Determine if message is from user based on the sender field
-                    // Since the message structure has {sender, message, timestamp}
                     const isFromUser = msg.sender === 'User' || 
-                                       msg.sender === currentUser?.name;
+                                     msg.is_from_user ||
+                                     msg.sender === currentUser?.name;
                     
                     return (
                       <div 
@@ -566,7 +606,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                           
                           {/* Message content - make it responsive */}
                           <div className="text-sm whitespace-pre-wrap overflow-hidden">
-                            {msg.message}
+                            {msg.message || msg.content}
                           </div>
                           
                           {/* Timestamp */}
@@ -590,6 +630,28 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                       </div>
                     );
                   })}
+                
+                {/* Add typing indicator */}
+                {isAgentTyping && (
+                  <div className="flex justify-start">
+                    <div className="flex-shrink-0 h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-2">
+                      <span className="text-indigo-600 dark:text-indigo-300 text-xs font-medium">
+                        {(team?.name?.charAt(0) || 'A').toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="max-w-[75%] px-4 py-2 rounded-2xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-bl-none shadow-sm">
+                      <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                        {team?.name || 'Agent'}
+                      </div>
+                      <div className="flex space-x-2">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div ref={messagesEndRef} />
               </div>
             ) : (

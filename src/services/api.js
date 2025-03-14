@@ -4,7 +4,7 @@ import axios from 'axios';
 // Create axios instance with default config
 const api = axios.create({
   // baseURL will be set according to your environment
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || "https://api-production-9e14.up.railway.app/api",
   headers: {
     'Content-Type': 'application/json',
   },
@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Add auth token if available
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('jwt'); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

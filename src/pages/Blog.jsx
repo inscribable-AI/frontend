@@ -78,7 +78,6 @@ function Blog() {
           order: '-sys.createdAt'
         });
 
-        console.log('Blog posts:', response.items);
         setPosts(response.items);
         setIsLoading(false);
       } catch (error) {

@@ -13,6 +13,16 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const register = async (firstName, lastName, email, password) => {
+    try {
+      const response = await authAPI.signUp({ firstName, lastName, email, password });
+      localStorage.setItem('email', email);
+      return response;
+    } catch (error) {
+      throw new Error('Failed to register. Please try again.');
+    }
+  };
+
   const login = (token) => {
     localStorage.setItem('jwt', token);
     setIsAuthenticated(true);
@@ -31,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

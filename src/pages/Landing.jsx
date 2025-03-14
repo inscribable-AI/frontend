@@ -133,7 +133,6 @@ function Landing() {
   
   const { preBuiltAgents = {} } = usePreBuiltAgents({
     onSuccess: (data) => {
-      console.log("data", data);
       preBuiltAgentsData.current = data.preBuiltAgents || {};
     },
     enabled: !preBuiltAgentsData.current // Only run the query if we don't have data
@@ -143,8 +142,6 @@ function Landing() {
   const currentAgents = agentsData.current || agents;
   const currentCategories = categoriesData.current || categories;
   const currentPreBuiltAgents = preBuiltAgentsData.current || preBuiltAgents;
-
-  console.log("currentPreBuiltAgents", currentPreBuiltAgents);
   
   const navigate = useNavigate();
   const { isAuthenticated } = useContext(AuthContext);

@@ -4,7 +4,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import DarkModeToggle from '../DarkModeToggle';
 import { authAPI } from '../../services/api';
 import { toast } from 'react-hot-toast';
-import glyderLogo from '../../assets/glyder-logo.svg';
+import cogniaLogo from '../../assets/cognia-logo.svg';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
@@ -131,7 +131,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Logo */}
       <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
         <Link to="/" className="text-blue-600 dark:text-blue-400 text-xl font-bold transition-colors flex items-center">
-          <img src={glyderLogo} alt="Glyder" className="w-40 h-40 mr-2" />
+          <img src={cogniaLogo} alt="Cognia" className="w-25 h-25 mr-2" />
         </Link>
         {isOpen && (
           <button 

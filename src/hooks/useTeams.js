@@ -23,7 +23,6 @@ export const useUserTeams = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Teams state updated:', teams);
   }, [teams]);
 
   return { teams, loading, error, fetchTeams };

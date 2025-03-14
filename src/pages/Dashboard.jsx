@@ -64,7 +64,6 @@ function Dashboard() {
       // Option 1: Get user ID from API
       const userResponse = await userAPI.getUser();
       const id = userResponse.data.id || userResponse.data._id || userResponse.data.userId;
-      console.log('Retrieved user ID:', id);
       setUserId(id);
       return id;
     } catch (error) {
@@ -73,7 +72,6 @@ function Dashboard() {
       // Option 2: Try to get from localStorage if you store it there
       const storedId = localStorage.getItem('userId');
       if (storedId) {
-        console.log('Using stored user ID:', storedId);
         setUserId(storedId);
         return storedId;
       }
@@ -89,13 +87,11 @@ function Dashboard() {
   }, []);
 
   useEffect(() => {
-    console.log('Fetching teams...');
     fetchTeams();
   }, [fetchTeams]);
 
   // Add a separate useEffect to fetch task summary
   useEffect(() => {
-    console.log('Fetching task summary...');
     fetchTaskSummary();
   }, []); // Empty dependency array means run once on mount
 
@@ -235,16 +231,12 @@ function Dashboard() {
         }
       }
       
-      console.log('Fetching task activity for user:', id);
-      
       // Call the Firebase method
       const activityData = await firebaseService.getUserTaskActivityByDateRange(
         id, 
         startDate, 
         endDate
       );
-      
-      console.log('Task activity data:', activityData);
       
       // Transform the data for the chart
       if (activityData.length > 0) {

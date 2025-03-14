@@ -17,7 +17,8 @@ function VerifyOTP() {
     try {
       if (!email) {
         throw new Error('Email not found');
-      }
+      }    
+      
       await authAPI.verifyOTP(otp, email);
       toast.success('Email verified successfully!');
       navigate('/signin');
@@ -76,6 +77,7 @@ function VerifyOTP() {
             <div>
               <button
                 type="submit"
+                onClick={handleSubmit}
                 disabled={isLoading}
                 className="w-full px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >

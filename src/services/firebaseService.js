@@ -36,7 +36,6 @@ const getDocId = async ({tasksCollection, taskId, threadId}) => {
       const firestoreDocId = querySnapshot.docs[0].id;
       return {message: `document id found`, error: false, data: firestoreDocId}
     }catch(e){
-      console.log("error in getStoreId", e)
       return {message: `Error in getStoreId`, error: true, data: null}
     }
   }
@@ -404,8 +403,6 @@ export const firebaseService = {
       // Convert to Firestore Timestamp
       const startTimestamp = Timestamp.fromDate(startDateTime);
       const endTimestamp = Timestamp.fromDate(endDateTime);
-      
-      console.log(`Fetching tasks for user ${userId} from ${startDateTime} to ${endDateTime}`);
       
       // Query tasks within the date range for this user
       const tasksQuery = query(

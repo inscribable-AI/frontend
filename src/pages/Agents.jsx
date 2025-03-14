@@ -32,14 +32,7 @@ function Agents() {
       setActiveCategory(categories[0]);
     }
   }, [categories]);
-
-  console.log('Current state:', {
-    agents,
-    categories,
-    activeCategory,
-    isLoading
-  });
-
+  
   // Filter agents for current category
   const currentAgents = agents.filter(agent => agent.category === activeCategory);
  
@@ -75,7 +68,6 @@ function Agents() {
     setIsSubmitting(true);
     try {
       // API call to create team would go here
-      console.log('Creating team:', teamData);
       toast.success('Team created successfully');
       setIsCreateTeamModalOpen(false);
       setSelectedAgents([]); // Clear selection after successful creation

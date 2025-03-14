@@ -15,7 +15,6 @@ const PreBuiltAgentsPage = () => {
       try {
         setIsLoading(true);
         const response = await agentAPI.getPreBuiltAgents();
-        console.log("response", response.data);
         setAgentData(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         console.error('Detailed error:', err);
