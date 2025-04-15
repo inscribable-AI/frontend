@@ -2,12 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import TT Firs Neue font (you'll need to add the actual font files) */
+@font-face {
+  font-family: 'TT Firs Neue';
+  src: url('/fonts/TTFirsNeue-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Firs Neue';
+  src: url('/fonts/TTFirsNeue-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Firs Neue';
+  src: url('/fonts/TTFirsNeue-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply the font family to the entire application */
+:root {
+  font-family: 'TT Firs Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --color-primary-50: #fdf2fc;
+  --color-primary-100: #fde6fa;
+  --color-primary-200: #fbcef5;
+  --color-primary-300: #f7a6ea;
+  --color-primary-400: #f173db;
+  --color-primary-500: #dd4fc1;
+  --color-primary-600: #c33aa5;
+  --color-primary-700: #9f2a81;
+  --color-primary-800: #812468;
+  --color-primary-900: #6b2157;
+  --color-primary-950: #3e0e31;
+  
+  /* Secondary light color */
+  --color-secondary-light-50: #fee7fd;
+  --color-secondary-light-100: #fbd5f9;
+  --color-secondary-light-200: #f7b2f2;
+  --color-secondary-light-300: #f481e7;
+  --color-secondary-light-400: #ee54d8;
+  --color-secondary-light-500: #e336c4;
+  --color-secondary-light-600: #c924a3;
+  --color-secondary-light-700: #a61d85;
+  --color-secondary-light-800: #891b6c;
+  --color-secondary-light-900: #731a5c;
+  
+  /* Secondary dark color - dark mode background */
+  --color-dark-bg: #0c020d;
+  --color-dark-surface: #1a0c1c;
+  --color-dark-border: #2c1a2f;
+  --color-dark-elevated: #271028;
+}
+
+@layer base {
+  /* Set up dark mode colors */
+  .dark {
+    --tw-bg-opacity: 1;
+    background-color: var(--color-dark-bg);
+    color-scheme: dark;
+  }
+  
+  .dark body {
+    background-color: var(--color-dark-bg);
+  }
+}
+
 body {
   @apply antialiased;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
   background-color: #f3f4f6;
+  font-family: 'TT Firs Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 #root {
@@ -159,5 +232,23 @@ body {
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-light-50 hover:bg-secondary-light-100 text-primary-700;
+  }
+  
+  .text-primary {
+    @apply text-primary-500 dark:text-primary-400;
+  }
+  
+  .border-primary {
+    @apply border-primary-500 dark:border-primary-400;
   }
 }

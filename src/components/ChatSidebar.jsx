@@ -41,11 +41,12 @@ export function ChatSidebar({
     <div className={`fixed top-0 left-0 h-full transition-all duration-300 z-10 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700 ${
       isCollapsed ? 'w-14' : 'w-64 md:w-80'
     }`}>
-      {/* Collapse toggle button */}
+      {/* Collapse toggle button with updated styling */}
       <div className="absolute -right-3 top-20 z-20">
         <button 
           onClick={onToggleCollapse}
-          className="bg-white dark:bg-gray-800 rounded-full p-1 shadow-md border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 rounded-full p-1 shadow-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <svg 
             className={`h-5 w-5 text-gray-500 dark:text-gray-400 transform transition-transform ${isCollapsed ? 'rotate-0' : 'rotate-180'}`}
@@ -84,7 +85,7 @@ export function ChatSidebar({
                     onClick={() => onChatSelect(chat.id)}
                     className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 border-l-2 transition-colors ${
                       currentChatId === chat.id 
-                        ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20' 
+                        ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-900/20' 
                         : 'border-transparent'
                     }`}
                   >
@@ -111,7 +112,7 @@ export function ChatSidebar({
               </svg>
               <p className="text-sm">No conversations yet</p>
               <button 
-                className="mt-4 px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+                className="mt-4 px-3 py-1.5 text-sm bg-primary-500 hover:bg-primary-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:ring-offset-1 transition-colors"
                 onClick={onNewChat}
               >
                 Start a new chat

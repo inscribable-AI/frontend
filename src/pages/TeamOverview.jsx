@@ -291,30 +291,6 @@ function EditAgentModal({ agent, onClose, onSave, isSubmitting }) {
   );
 }
 
-const mockTasks = [
-  {
-    id: 1,
-    name: "Smart Contract Audit",
-    status: "In Progress",
-    agent: "Contract_Analyzer",
-    date: new Date().toISOString()
-  },
-  {
-    id: 2,
-    name: "Security Assessment",
-    status: "Completed",
-    agent: "Vulnerability_Identifier",
-    date: new Date().toISOString()
-  },
-  {
-    id: 3,
-    name: "Documentation Review",
-    status: "Pending",
-    agent: "RAG_Agent",
-    date: new Date().toISOString()
-  }
-];
-
 function TeamOverview() {
   const { teamId } = useParams();
   const { team } = useUserTeam(teamId);

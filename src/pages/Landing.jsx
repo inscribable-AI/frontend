@@ -30,8 +30,8 @@ const animationStyles = `
   }
   
   @keyframes glow-animation {
-    0%, 100% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.4); }
-    50% { box-shadow: 0 0 30px rgba(79, 70, 229, 0.7); }
+    0%, 100% { box-shadow: 0 0 20px rgba(221, 79, 193, 0.4); }
+    50% { box-shadow: 0 0 30px rgba(221, 79, 193, 0.7); }
   }
   
   @keyframes white-glow-animation {
@@ -196,80 +196,44 @@ function Landing() {
       <Navbar />
       
       {/* Hero Section - More dynamic with animated elements */}
-      <div className="relative bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-950 dark:to-black overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
-        
-        {/* Animated floating elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/5 w-64 h-64 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-float-medium"></div>
-          <div className="absolute top-2/3 left-1/3 w-72 h-72 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full blur-3xl animate-float-fast"></div>
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block mb-6 p-2 bg-white/10 backdrop-blur-lg rounded-full animate-pulse-slow">
-            <div className="px-4 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full">
-              <span className="text-sm font-medium text-white">New: Team Collaboration Features</span>
-            </div>
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Deploy AI Agents & Teams <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">in Minutes</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10">
-            Build, customize, and deploy powerful AI solutions with our pre-built agents and teams
-          </p>
-          
-          {/* Single CTA button - Different styles based on authentication */}
-          <div className="flex justify-center">
-            {isAuthenticated ? (
-              <button 
-                onClick={() => navigate('/dashboard')}
-                className="group px-10 py-4 text-lg font-bold rounded-lg bg-white text-gray-900 hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl relative overflow-hidden animate-white-glow"
-              >
-                <span className="absolute inset-0 w-full h-full bg-gray-200/30 transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
-                <span className="relative z-10 flex items-center justify-center">
-                  Go to Dashboard
-                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-            ) : (
-              <button 
-                onClick={() => navigate('/signup')}
-                className="group px-10 py-4 text-lg font-bold rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-300 shadow-lg hover:shadow-xl relative overflow-hidden animate-glow"
-              >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-400/20 to-indigo-400/20 transform scale-x-0 origin-left transition-transform group-hover:scale-x-100"></span>
-                <span className="relative z-10 flex items-center justify-center">
-                  Get Started
-                  <FontAwesomeIcon icon={faArrowRight} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-            )}
-          </div>
-          
-          {/* Animated icons */}
-          <div className="mt-16 flex justify-center space-x-8 md:space-x-16">
-            <div className="animate-bounce-slow">
-              <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <FontAwesomeIcon icon={faRobot} className="text-blue-400 text-2xl" />
+      <div className="relative bg-white dark:bg-dark-bg overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative z-10 pb-8 bg-white dark:bg-dark-bg sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+              <div className="sm:text-center lg:text-left">
+                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
+                  <span className="block xl:inline">Build intelligent agents with</span>{' '}
+                  <span className="block text-primary-600 dark:text-primary-500 xl:inline">AI teammates</span>
+                </h1>
+                <p className="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                  Create, customize, and manage AI agents that work together to solve your most complex challenges
+                </p>
+                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                  <div className="rounded-md shadow">
+                    <button
+                      onClick={() => navigate(isAuthenticated ? '/dashboard' : '/signup')}
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 md:py-4 md:text-lg md:px-10"
+                    >
+                      Get started
+                    </button>
+                  </div>
+                  <div className="mt-3 sm:mt-0 sm:ml-3">
+                    <button 
+                      onClick={() => navigate('/features')}
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary-700 dark:text-primary-300 bg-primary-100 dark:bg-primary-900/30 hover:bg-primary-200 dark:hover:bg-primary-900/40 md:py-4 md:text-lg md:px-10"
+                    >
+                      Learn more
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="animate-bounce-medium">
-              <div className="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center">
-                <FontAwesomeIcon icon={faBrain} className="text-purple-400 text-2xl" />
-              </div>
-            </div>
-            <div className="animate-bounce-fast">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                <FontAwesomeIcon icon={faGlobe} className="text-emerald-400 text-2xl" />
-              </div>
-            </div>
+            </main>
           </div>
         </div>
       </div>
 
       {/* Content Tabs */}
-      <div className="py-16 bg-white dark:bg-gray-800">
+      <div className="py-16 bg-white dark:bg-dark-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center mb-10">
             <div className="inline-flex rounded-md shadow-sm">
@@ -277,9 +241,9 @@ function Landing() {
                 onClick={() => setActiveSection('agents')}
                 className={`px-6 py-3 text-sm font-medium rounded-l-lg ${
                   activeSection === 'agents'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-                } border border-gray-200 dark:border-gray-600 focus:z-10 focus:outline-none`}
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white dark:bg-dark-surface text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-elevated'
+                } border border-gray-200 dark:border-dark-border focus:z-10 focus:outline-none`}
               >
                 <FontAwesomeIcon icon={faRobot} className="mr-2" />
                 Single Agents
@@ -288,9 +252,9 @@ function Landing() {
                 onClick={() => setActiveSection('teams')}
                 className={`px-6 py-3 text-sm font-medium rounded-r-lg ${
                   activeSection === 'teams'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-                } border border-gray-200 dark:border-gray-600 focus:z-10 focus:outline-none`}
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white dark:bg-dark-surface text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-dark-elevated'
+                } border border-gray-200 dark:border-dark-border focus:z-10 focus:outline-none`}
               >
                 <FontAwesomeIcon icon={faPeopleGroup} className="mr-2" />
                 Agent Teams
@@ -318,8 +282,8 @@ function Landing() {
                     onClick={() => setActiveCategory(category)}
                     className={`px-4 py-2 rounded-full text-sm font-medium ${
                       activeCategory === category
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                        ? 'bg-primary-600 text-white'
+                        : 'bg-gray-100 dark:bg-dark-surface text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-elevated'
                     }`}
                   >
                     {category}
@@ -363,7 +327,7 @@ function Landing() {
               <div className="text-center mt-12">
                 <button
                   onClick={() => navigate('/explore')}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
                 >
                   View All Agents
                   <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
@@ -386,13 +350,13 @@ function Landing() {
 
               {/* View Toggle */}
               <div className="flex justify-center mb-10">
-                <div className="inline-flex rounded-md shadow-sm bg-white dark:bg-gray-700 p-1">
+                <div className="inline-flex rounded-md shadow-sm bg-white dark:bg-dark-surface p-1">
                   <button
                     onClick={() => setTeamViewType('cards')}
                     className={`px-6 py-3 text-sm font-medium rounded-lg flex items-center ${
                       teamViewType === 'cards'
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+                        ? 'bg-primary-600 text-white shadow-md'
+                        : 'bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-elevated'
                     } transition-all duration-200`}
                   >
                     <FontAwesomeIcon icon={faThLarge} className="mr-2" />
@@ -402,8 +366,8 @@ function Landing() {
                     onClick={() => setTeamViewType('list')}
                     className={`px-6 py-3 text-sm font-medium rounded-lg flex items-center ${
                       teamViewType === 'list'
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+                        ? 'bg-primary-600 text-white shadow-md'
+                        : 'bg-transparent text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-elevated'
                     } transition-all duration-200`}
                   >
                     <FontAwesomeIcon icon={faListUl} className="mr-2" />
@@ -413,12 +377,12 @@ function Landing() {
               </div>
 
               {/* Teams Content */}
-              <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-750 dark:to-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <div className="bg-gradient-to-b from-gray-50 to-white dark:from-dark-surface dark:to-dark-bg rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-dark-border">
                 {/* Loading State */}
                 {formattedTeams.length === 0 && (
                   <div className="py-16 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-6 animate-pulse">
-                      <FontAwesomeIcon icon={faPeopleGroup} className="text-blue-600 dark:text-blue-400 text-3xl" />
+                    <div className="w-20 h-20 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                      <FontAwesomeIcon icon={faPeopleGroup} className="text-primary-600 dark:text-primary-400 text-3xl" />
                     </div>
                     <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">Loading Teams</h3>
                     <p className="text-gray-500 dark:text-gray-400 max-w-md text-center">
@@ -447,7 +411,7 @@ function Landing() {
               <div className="text-center mt-12">
                 <button
                   onClick={() => navigate('/teams')}
-                  className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-lg shadow-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300"
+                  className="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-lg shadow-md text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-300"
                 >
                   Explore All Teams
                   <FontAwesomeIcon icon={faArrowRight} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -459,160 +423,60 @@ function Landing() {
       </div>
 
       {/* Features Section - Interactive with hover effects and animations */}
-      <div className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+      <div className="py-12 bg-white dark:bg-dark-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Why Choose Our AI Platform?
-            </h2>
-            <p className="mt-4 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Deploy powerful AI solutions with minimal setup and maximum flexibility
+          <div className="lg:text-center">
+            <h2 className="text-base text-primary-600 dark:text-primary-400 font-semibold tracking-wide uppercase">Features</h2>
+            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              Build your AI team, your way
+            </p>
+            <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300 lg:mx-auto">
+              Powerful tools to create and manage AI agents designed for your specific needs
             </p>
           </div>
-          
-          {/* Interactive feature showcase */}
-          <div className="mb-16">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+
+          <div className="mt-10">
+            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
               {features.map((feature, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleFeatureClick(index)}
-                  className={`py-4 px-2 rounded-lg transition-all duration-300 ${
-                    activeFeature === index 
-                      ? `bg-gradient-to-r ${feature.color} text-white shadow-lg` 
-                      : `${feature.bgLight} dark:${feature.bgDark} text-gray-700 dark:text-gray-300 hover:shadow-md`
-                  }`}
-                >
-                  <FontAwesomeIcon 
-                    icon={feature.icon} 
-                    className={`text-xl ${activeFeature === index ? 'text-white' : feature.iconColor}`} 
-                  />
-                  <div className="mt-2 font-medium">{feature.title}</div>
-                </button>
-              ))}
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all duration-500">
-              <div className="p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-start">
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${features[activeFeature].color} flex items-center justify-center mb-6 md:mb-0 md:mr-6 shadow-lg`}>
-                    <FontAwesomeIcon icon={features[activeFeature].icon} className="text-white text-2xl" />
+                <div key={index} className="relative">
+                  <div className={`absolute flex items-center justify-center h-12 w-12 rounded-md ${feature.bgLight} dark:${feature.bgDark} text-white`}>
+                    <FontAwesomeIcon icon={feature.icon} className={feature.iconColor} />
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                      {features[activeFeature].title}
-                    </h3>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
-                      {features[activeFeature].description}
-                    </p>
-                    
-                    {/* Feature-specific content */}
-                    <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {activeFeature === 0 && (
-                        <>
-                          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-amber-800 dark:text-amber-300 mb-2">Instant Deployment</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Deploy agents in seconds with no setup required</p>
-                          </div>
-                          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-amber-800 dark:text-amber-300 mb-2">Pre-trained Models</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Agents come with optimized models for their tasks</p>
-                          </div>
-                          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-amber-800 dark:text-amber-300 mb-2">Proven Templates</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Start with templates built by AI experts</p>
-                          </div>
-                        </>
-                      )}
-                      
-                      {activeFeature === 1 && (
-                        <>
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-emerald-800 dark:text-emerald-300 mb-2">Flexible Configuration</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Adjust parameters to match your exact needs</p>
-                          </div>
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-emerald-800 dark:text-emerald-300 mb-2">Custom Workflows</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Design unique processes for your business</p>
-                          </div>
-                          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-emerald-800 dark:text-emerald-300 mb-2">API Integration</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Connect with your existing tools and services</p>
-                          </div>
-                        </>
-                      )}
-                      
-                      {activeFeature === 2 && (
-                        <>
-                          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-2">Unlimited Agents</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Add as many agents as your workload requires</p>
-                          </div>
-                          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-2">Team Coordination</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Agents work together seamlessly as you scale</p>
-                          </div>
-                          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-purple-800 dark:text-purple-300 mb-2">Performance Optimization</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Automatically scales resources as needed</p>
-                          </div>
-                        </>
-                      )}
-                      
-                      {activeFeature === 3 && (
-                        <>
-                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Data Encryption</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">End-to-end encryption for all your data</p>
-                          </div>
-                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Access Controls</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Granular permissions for team members</p>
-                          </div>
-                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                            <h4 className="font-medium text-blue-800 dark:text-blue-300 mb-2">Compliance Ready</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Built to meet enterprise security standards</p>
-                          </div>
-                        </>
-                      )}
-                    </div>
+                  <div className="ml-16">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">{feature.title}</h3>
+                    <p className="mt-2 text-base text-gray-500 dark:text-gray-300">{feature.description}</p>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* CTA Section - More subtle gradient */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-950 dark:to-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
-        
-        {/* Animated accent */}
-        <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 w-2/3 h-48 bg-gradient-to-r from-blue-500/30 to-indigo-500/30 blur-3xl rounded-full animate-pulse-slow"></div>
-        
-        <div className="relative max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8 lg:flex lg:items-center lg:justify-between">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            <span className="block">Ready to get started?</span>
-            <span className="block text-blue-400">Deploy your first AI agent today.</span>
+      {/* Call to Action */}
+      <div className="py-20 bg-gradient-to-r from-primary-600 to-primary-700 dark:from-primary-700 dark:to-primary-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to transform your workflow with AI?
           </h2>
-          <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-            <div className="inline-flex rounded-md shadow">
-              <button
-                onClick={() => navigate(isAuthenticated ? '/dashboard' : '/signin')}
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-white hover:bg-gray-100 transition-colors"
-              >
-                {isAuthenticated ? 'Go to Dashboard' : 'Sign in'}
-              </button>
-            </div>
-            <div className="ml-3 inline-flex rounded-md shadow">
-              <button
-                onClick={() => navigate('/signup')}
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-colors"
-              >
-                Create Account
-              </button>
-            </div>
+          <p className="text-xl text-primary-100 mb-10 max-w-3xl mx-auto">
+            Start building your AI agent team today and unlock new levels of productivity and innovation.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <button 
+              onClick={() => isAuthenticated ? navigate('/dashboard') : navigate('/signup')}
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-primary-700 bg-white hover:bg-gray-50 transition-colors duration-200"
+            >
+              {isAuthenticated ? 'Go to Dashboard' : 'Get Started for Free'}
+              <FontAwesomeIcon icon={faRocket} className="ml-2" />
+            </button>
+            <button 
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center justify-center px-6 py-3 border border-white rounded-md shadow-sm text-base font-medium text-white bg-transparent hover:bg-primary-500 transition-colors duration-200"
+            >
+              Contact Sales
+              <FontAwesomeIcon icon={faGlobe} className="ml-2" />
+            </button>
           </div>
         </div>
       </div>

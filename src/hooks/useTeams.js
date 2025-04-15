@@ -1,5 +1,69 @@
 import { useState, useCallback, useEffect } from 'react';
-import { userAPI } from '../services/api';
+import { userAPI, agentV2API } from '../services/api';
+
+
+export const useUserAgents = () => {
+  const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchUserAgents = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await agentV2API.getUserAgents();
+      console.log("data", data);
+      // Separate agents into tool agents and super agents
+      const toolAgents = data.data.toolAgents;
+      const superAgents = data.data.superAgents;
+      
+      // Set agents as object with separated arrays
+      setAgents({
+        toolAgents,
+        superAgents
+      });
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching agents:', err);
+      setError(err.message || 'Failed to fetch agents');
+      setAgents([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+  }, [agents]);
+
+  return { agents, loading, error, fetchUserAgents };
+};
+
+export const useUserAgent = (agentId) => {
+  const [agent, setAgent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchUserAgent = useCallback(async () => {
+    if (!agentId) return;
+    setLoading(true);
+    try {
+      const response = await agentV2API.getUserAgentById(agentId);
+      setAgent(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching team:', err);
+      setError(err.message || 'Failed to fetch team');
+      setAgent(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [agentId]);
+
+  useEffect(() => {
+    fetchUserAgent();
+  }, [fetchUserAgent]);
+
+  return { agent, loading, error, fetchUserAgent };
+}; 
 
 export const useUserTeams = () => {
   const [teams, setTeams] = useState([]);

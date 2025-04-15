@@ -7,7 +7,14 @@ import {
   faFileAlt, 
   faPen, 
   faCode, 
-  faEllipsisH 
+  faEllipsisH,
+  faTools,
+  faKey,
+  faInfoCircle,
+  faCopy,
+  faWrench,
+  faHammer,
+  faScrewdriverWrench
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -18,5 +25,12 @@ library.add(
   faFileAlt,
   faPen,
   faCode,
-  faEllipsisH
+  faEllipsisH,
+  faTools,
+  faKey,
+  faInfoCircle,
+  faCopy,
+  faWrench,
+  faHammer,
+  faScrewdriverWrench
 ); 

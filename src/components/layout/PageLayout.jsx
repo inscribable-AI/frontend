@@ -1,13 +1,10 @@
 import React from 'react';
-import Navbar from './Navbar';
 import Footer from './Footer';
-import DarkModeToggle from '../DarkModeToggle';
 
-function LandingLayout({ children }) {
+function PageLayout({ children }) {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-dark-bg text-gray-900 dark:text-white">
-      <Navbar />
-      <main className="flex-grow pt-16">
+      <main className="flex-grow">
         {children}
       </main>
       <Footer />
@@ -15,4 +12,4 @@ function LandingLayout({ children }) {
   );
 }
 
-export default LandingLayout; 
+export default PageLayout; 

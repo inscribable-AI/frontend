@@ -187,7 +187,20 @@ export function TaskTable({ teamId }) {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {task.agent || task.agentId || 'Not assigned'}
+                      {/* Format for agent ID display */}
+                      {task.agent && task.agent.startsWith('TA_') ? (
+                        <span className="inline-flex items-center gap-1">
+                          <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
+                          <span>Tool Agent</span>
+                        </span>
+                      ) : task.agent && task.agent.startsWith('SA_') ? (
+                        <span className="inline-flex items-center gap-1">
+                          <span className="h-2 w-2 bg-purple-500 rounded-full"></span>
+                          <span>Super Agent</span>
+                        </span>
+                      ) : (
+                        <span>{task.agent || task.agentId || 'Not assigned'}</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {task.createdAt && task.createdAt.toDate 

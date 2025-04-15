@@ -1,0 +1,57 @@
+/* Primary color utilities */
+.bg-primary { background-color: var(--color-primary) !important; }
+.bg-primary-light { background-color: var(--color-primary-light) !important; }
+.bg-primary-hover:hover { background-color: var(--color-primary-hover) !important; }
+.text-primary { color: var(--color-primary) !important; }
+.text-primary-hover:hover { color: var(--color-primary-hover) !important; }
+.border-primary { border-color: var(--color-primary) !important; }
+
+/* Secondary1 color utilities */
+.bg-secondary-1 { background-color: var(--color-secondary-1) !important; }
+.bg-secondary-1-hover:hover { background-color: var(--color-secondary-1-hover) !important; }
+.text-secondary-1 { color: var(--color-secondary-1) !important; }
+.border-secondary-1 { border-color: var(--color-secondary-1) !important; }
+
+/* Secondary2 color utilities */
+.bg-secondary-2 { background-color: var(--color-secondary-2) !important; }
+.bg-secondary-2-hover:hover { background-color: var(--color-secondary-2-hover) !important; }
+.text-secondary-2 { color: var(--color-secondary-2) !important; }
+.border-secondary-2 { border-color: var(--color-secondary-2) !important; }
+
+/* Brand Colors */
+.text-brand {
+  color: var(--color-primary-500);
+}
+
+.text-brand-light {
+  color: var(--color-secondary-light-50);
+}
+
+.text-brand-dark {
+  color: var(--color-secondary-dark-900);
+}
+
+.bg-brand {
+  background-color: var(--color-primary-500);
+}
+
+.bg-brand-light {
+  background-color: var(--color-secondary-light-50);
+}
+
+.bg-brand-dark {
+  background-color: var(--color-secondary-dark-900);
+}
+
+.border-brand {
+  border-color: var(--color-primary-500);
+}
+
+/* Dark mode variants */
+.dark .text-brand {
+  color: var(--color-primary-400);
+}
+
+.dark .bg-brand-accent {
+  background-color: var(--color-primary-400);
+} 

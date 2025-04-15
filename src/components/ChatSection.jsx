@@ -5,8 +5,14 @@ import { db } from '../firebase/config'; // Make sure you have Firebase configur
 import { collection, addDoc, query, where, getDocs, orderBy, doc, updateDoc, arrayUnion, getDoc, onSnapshot } from 'firebase/firestore';
 import { ChatSidebar } from './ChatSidebar';
 import { firebaseMessageService } from '../services/firebaseService';
+import { useNavigate } from 'react-router-dom';
+import { faExpand, faArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
+  
+  console.log('team', team);
+  
   const [currentUser, setCurrentUser] = useState({
     id: 'default-user',
     name: 'User',
@@ -31,6 +37,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const currentThreadIdRef = useRef(null);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
+  const navigate = useNavigate();
 
   const handleTaskClick = () => {
     setIsTaskMode(!isTaskMode);
@@ -349,6 +356,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
       const apiData = {
         agentId: team?.id,
         taskMessage: messageData.content,
+        version: 'v2',  
       };
       
       // First check if we have a threadId in the session ref
@@ -454,6 +462,12 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
     }
   };
 
+  // Add this function to handle navigation to the full chat page
+  const handleExpandChat = () => {
+    // Navigate to chat page with the team ID as a parameter
+    navigate(`/chat/${team?.id || 'default'}`, { state: { team } });
+  };
+
   if (isCollapsed) {
     return (
       <div className="flex flex-col h-screen bg-white dark:bg-gray-800 rounded-l-xl shadow-sm border-l border-gray-200 dark:border-gray-700 w-[50px]">
@@ -495,13 +509,13 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
       <div className={`transition-all duration-300 ${
         isSidebarCollapsed ? 'ml-14' : 'ml-64 md:ml-80'
       }`}>
-        <div className="flex flex-col h-screen bg-white dark:bg-gray-800 shadow-sm border-l border-gray-200 dark:border-gray-700 w-full md:w-[400px] md:rounded-l-xl">
-          {/* Chat header with New Chat button */}
+        <div className="flex flex-col h-screen bg-white dark:bg-gray-800 shadow-md border-l border-gray-200 dark:border-gray-700 w-full md:w-[400px] md:rounded-l-xl">
+          {/* Chat header with improved styling */}
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                  <span className="text-blue-600 dark:text-blue-300 font-medium">
+                <div className="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                  <span className="text-primary-600 dark:text-primary-300 font-medium">
                     {team?.name?.charAt(0) || 'T'}
                   </span>
                 </div>
@@ -515,6 +529,13 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                 </div>
               </div>
               <div className="flex items-center space-x-2">
+                <button
+                  onClick={handleExpandChat}
+                  className="p-2 text-gray-500 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
+                  title="Expand to full screen"
+                >
+                  <FontAwesomeIcon icon={faExpand} className="w-5 h-5" />
+                </button>
                 <button
                   onClick={handleNewChat}
                   className="p-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400"
@@ -555,7 +576,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
             </div>
           </div>
 
-          {/* Messages container */}
+          {/* Messages container with consistent spacing */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {isLoadingMessages ? (
               <div className="flex justify-center items-center h-32">
@@ -593,7 +614,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                         <div 
                           className={`max-w-[75%] px-4 py-2 rounded-2xl ${
                             isFromUser 
-                              ? 'bg-blue-500 text-white rounded-br-none' 
+                              ? 'bg-primary-500 text-white rounded-br-none' 
                               : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white rounded-bl-none shadow-sm'
                           } break-words overflow-auto`}
                         >
@@ -621,8 +642,8 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                         
                         {/* Right avatar for user messages */}
                         {isFromUser && (
-                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center ml-2">
-                            <span className="text-blue-600 dark:text-blue-300 text-xs font-medium">
+                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center ml-2">
+                            <span className="text-primary-600 dark:text-primary-300 text-xs font-medium">
                               {(currentUser?.name?.charAt(0) || 'U').toUpperCase()}
                             </span>
                           </div>
@@ -644,9 +665,9 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                         {team?.name || 'Agent'}
                       </div>
                       <div className="flex space-x-2">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce delay-100"></div>
+                        <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce delay-200"></div>
                       </div>
                     </div>
                   </div>
@@ -665,7 +686,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
             )}
           </div>
 
-          {/* Input section */}
+          {/* Input section with consistent styling */}
           <div className="border-t border-gray-200 dark:border-gray-700 p-4 space-y-4">
             <form onSubmit={handleSendMessage} className="relative">
               <textarea
@@ -681,11 +702,11 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                 placeholder={isTaskMode ? "Enter your task..." : "Ask anything"}
                 rows={1}
                 className={`w-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-600 px-4 py-3 pr-12 
-                  focus:outline-none focus:ring-0 focus:border-gray-200 dark:focus:border-gray-600
+                  focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400
                   placeholder-gray-500 dark:placeholder-gray-400 
                   resize-none overflow-hidden 
                   transition-colors duration-200
-                  ${isTaskMode ? 'border-yellow-500' : ''}`}
+                  ${isTaskMode ? 'border-primary-500' : ''}`}
                 style={{
                   minHeight: '44px',
                   maxHeight: '200px',
@@ -704,7 +725,7 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
                   <button
                     type="submit"
                     disabled={!inputMessage.trim()}
-                    className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 disabled:opacity-50 disabled:hover:text-gray-500 dark:disabled:hover:text-gray-400 disabled:cursor-not-allowed transition-colors duration-200"
+                    className="p-2 text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 disabled:opacity-50 disabled:hover:text-gray-500 dark:disabled:hover:text-gray-400 disabled:cursor-not-allowed transition-colors duration-200"
                   >
                     <svg
                       className="w-5 h-5"
@@ -718,14 +739,14 @@ export function ChatSection({ team, isCollapsed, onToggleCollapse }) {
               </div>
             </form>
 
-            {/* Action buttons */}
+            {/* Action buttons with consistent colors */}
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center space-x-4">
                 <button
                   onClick={handleTaskClick}
                   className={`flex items-center space-x-2 transition-colors ${
                     isTaskMode 
-                      ? 'text-yellow-500' 
+                      ? 'text-primary-500' 
                       : 'text-gray-400 hover:text-gray-300'
                   }`}
                 >

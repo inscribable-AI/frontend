@@ -7,7 +7,7 @@ config()
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 50390,
+    port: 3000,
     host: '0.0.0.0',
     headers: {
       'Access-Control-Allow-Origin': '*',

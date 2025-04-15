@@ -155,4 +155,72 @@ td {
 
 .alert-success {
   @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200;
+}
+
+/* Aggressive fix for top spacing issue */
+.fix-top-space main,
+.fix-top-space .main,
+.fix-top-space div[class*="py-"],
+.fix-top-space div[class*="mt-"],
+.fix-top-space div[class*="pt-"] {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Force negative margin to counteract any persistent space */
+.page-wrapper {
+  margin-top: -3rem !important;
+}
+
+/* Target all possible containers */
+main > div,
+main > div > div,
+main > div > div > div {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Override any Tailwind padding classes */
+.py-6, .py-8, .py-4, .py-2,
+.pt-6, .pt-8, .pt-4, .pt-2 {
+  padding-top: 0 !important;
+}
+
+/* Override any Tailwind margin classes */
+.mt-6, .mt-8, .mt-4, .mt-2 {
+  margin-top: 0 !important;
+}
+
+/* Add space only where needed - first child of content area */
+.page-wrapper h1:first-child,
+.page-wrapper h2:first-child,
+.page-wrapper > div > div > div > div:first-child {
+  margin-top: 1rem !important;
+}
+
+/* Adjust content when sidebar is collapsed to use available space */
+.sidebar-collapsed .max-w-7xl {
+  max-width: none !important; /* Remove max-width constraint completely */
+  width: calc(100% - 1.5rem) !important; /* Take full width minus some padding */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  transition: all 0.3s ease;
+}
+
+/* Responsive width adjustments for better readability on larger screens */
+@media (min-width: 1280px) {
+  .sidebar-collapsed .max-w-7xl {
+    width: calc(100% - 4rem) !important; /* Add more side padding on larger screens */
+  }
+}
+
+@media (min-width: 1536px) {
+  .sidebar-collapsed .max-w-7xl {
+    width: calc(100% - 6rem) !important; /* Add even more side padding on very large screens */
+  }
+}
+
+/* When sidebar is open, use standard Tailwind max-width */
+.max-w-7xl {
+  transition: all 0.3s ease;
 } 

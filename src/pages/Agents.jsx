@@ -1,41 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import AgentCard from '../components/cards/AgentCard';
 import { useAgents } from '../hooks/useAgents';
 import PageWrapper from '../components/layout/PageWrapper';
-import { Dialog } from '@headlessui/react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { CreateTeam } from '../components/CreateTeam';
 import { AgentList } from '../components/AgentList';
+import { SearchBar } from '../components/SearchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRobot, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 function Agents() {
   const { agents, categories, isLoading } = useAgents();
-  const [activeCategory, setActiveCategory] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
   const [selectedAgents, setSelectedAgents] = useState([]);
   const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newTeamName, setNewTeamName] = useState('');
-  const [isSelectTeamModalOpen, setIsSelectTeamModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-
-  // Temporary mock data for available teams
-  const availableTeams = [
-    { id: 'team1', name: 'Team Alpha' },
-    { id: 'team2', name: 'Team Beta' },
-    { id: 'team3', name: 'Team Gamma' }
-  ];
 
   // Set initial active category when categories are loaded
   useEffect(() => {
     if (categories.length > 0 && !activeCategory) {
-      setActiveCategory(categories[0]);
+      setActiveCategory('All');
     }
   }, [categories]);
   
-  // Filter agents for current category
-  const currentAgents = agents.filter(agent => agent.category === activeCategory);
- 
+  // Add 'All' category to the categories list
+  const allCategories = ['All', ...categories];
+  
+  // Filter agents by search query
+  const filteredBySearch = !searchQuery 
+    ? agents 
+    : agents.filter(agent => 
+        agent.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (agent.description && agent.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (agent.category && agent.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+  
+  // Filter by category
+  const filteredAgents = activeCategory === 'All' 
+    ? filteredBySearch 
+    : filteredBySearch.filter(agent => agent.category === activeCategory);
+  
   const handleAgentSelect = (agent) => {
     setSelectedAgents(prev => {
       const isSelected = prev.some(a => a.id === agent.id);
@@ -45,23 +52,6 @@ function Agents() {
         return [...prev, agent];
       }
     });
-  };
-
-  const handleAddToTeam = async (teamId) => {
-    try {
-      // TODO: Implement add to existing team logic
-      // await addAgentsToTeam(teamId, selectedAgents);
-      
-      toast.success('Agents added to team successfully');
-      setIsSelectTeamModalOpen(false);
-      setSelectedAgents([]);
-      
-      // Navigate to team overview page
-      navigate(`/dashboard/team/${teamId}`);
-    } catch (error) {
-      toast.error('Failed to add agents to team');
-      console.error('Error adding agents to team:', error);
-    }
   };
 
   const handleCreateTeam = async (teamData) => {
@@ -83,7 +73,7 @@ function Agents() {
     return (
       <PageWrapper>
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 dark:border-primary-400"></div>
         </div>
       </PageWrapper>
     );
@@ -91,152 +81,105 @@ function Agents() {
 
   return (
     <PageWrapper>
-      <div className="space-y-8 bg-gray-100 dark:bg-gray-900">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header section with title and search */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Agents</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+              <FontAwesomeIcon 
+                icon={faRobot} 
+                className="mr-3 text-primary-600 dark:text-primary-400" 
+              />
+              Agents
+            </h1>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Select agents to create or add to a team
+              Browse and select agents to create or add to a team
             </p>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* View Toggle */}
-            <div className="flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 ${viewMode === 'grid' ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'}`}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 ${viewMode === 'list' ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500'}`}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
-              </button>
+          {/* Search bar */}
+          <div className="mt-4 md:mt-0">
+            <SearchBar 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              placeholder="Search for agents..."
+            />
+          </div>
+        </div>
+        
+        {/* Category filters and Create Team button on the same row */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+          <div className="overflow-x-auto w-full sm:w-auto">
+            <div className="flex space-x-2 pb-2">
+              {allCategories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap ${
+                    activeCategory === category
+                      ? 'bg-primary-100 text-black dark:bg-primary-900/30 dark:text-black'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
-
-            {/* Create Team Button */}
-            {selectedAgents.length > 0 && (
-              <button
-                onClick={() => setIsCreateTeamModalOpen(true)}
-                className="group relative inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 shadow-sm transition-all duration-200 ease-in-out hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-800"
-              >
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <svg 
-                    className="h-5 w-5 text-gray-400 group-hover:text-indigo-500/70 dark:text-gray-500 dark:group-hover:text-indigo-400/70 transition-colors duration-200 ease-in-out" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth="2" 
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </span>
-                <span className="pl-8 group-hover:text-indigo-600/70 dark:group-hover:text-indigo-400/70">
-                  Create Team ({selectedAgents.length})
-                </span>
-              </button>
-            )}
           </div>
+          
+          {/* Create Team button - now next to category filters */}
+          <button
+            onClick={() => setIsCreateTeamModalOpen(true)}
+            disabled={selectedAgents.length === 0}
+            className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm ${
+              selectedAgents.length > 0
+                ? 'text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600'
+                : 'text-gray-400 bg-gray-200 dark:bg-gray-700 cursor-not-allowed'
+            }`}
+          >
+            <FontAwesomeIcon icon={faUsers} className="mr-2" />
+            Create Team ({selectedAgents.length})
+          </button>
         </div>
-
-        {/* Categories Navigation */}
-        <div className="mb-8">
-          <nav className="flex space-x-4 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
-                  activeCategory === category
-                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* Main Section */}
-        <section>
-          <AgentList
-            agents={currentAgents}
-            selectedAgents={selectedAgents}
-            onAgentSelect={handleAgentSelect}
-            layout={viewMode}
-            className="mt-6"
-          />
-        </section>
-
-        {/* Create Team Modal */}
-        {isCreateTeamModalOpen && (
-          <CreateTeam
-            agents={selectedAgents}
-            onClose={() => setIsCreateTeamModalOpen(false)}
-            onCreateTeam={handleCreateTeam}
-            isSubmitting={isSubmitting}
-          />
-        )}
-
-        {/* Select Team Modal */}
-        <Dialog
-          open={isSelectTeamModalOpen}
-          onClose={() => setIsSelectTeamModalOpen(false)}
-          className="relative z-50"
-        >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true" />
-
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 shadow-xl transition-all border border-gray-200 dark:border-gray-700">
-              <Dialog.Title className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                Select Team
-              </Dialog.Title>
-
-              <div className="space-y-4">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Choose a team to add {selectedAgents.length} agent{selectedAgents.length !== 1 ? 's' : ''} to:
+        
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 dark:border-primary-400"></div>
+          </div>
+        ) : (
+          <>
+            {filteredAgents.length === 0 ? (
+              <div className="text-center py-12">
+                <FontAwesomeIcon icon={faRobot} className="text-gray-400 text-4xl mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">No agents found</h3>
+                <p className="mt-1 text-gray-500 dark:text-gray-400">
+                  Try adjusting your search or filter criteria
                 </p>
-
-                <div className="space-y-2">
-                  {availableTeams.map((team) => (
-                    <button
-                      key={team.id}
-                      onClick={() => handleAddToTeam(team.id)}
-                      className="w-full p-4 text-left rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-                    >
-                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                        {team.name}
-                      </h3>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex justify-end mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setIsSelectTeamModalOpen(false)}
-                    className="px-4 py-2 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                  >
-                    Cancel
-                  </button>
-                </div>
               </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
+            ) : (
+              <AgentList
+                agents={filteredAgents}
+                selectedAgents={selectedAgents}
+                onAgentSelect={handleAgentSelect}
+                layout={viewMode}
+                className="mt-6"
+              />
+            )}
+          </>
+        )}
       </div>
+
+      {/* Create Team Modal */}
+      {isCreateTeamModalOpen && (
+        <CreateTeam
+          agents={selectedAgents}
+          onClose={() => setIsCreateTeamModalOpen(false)}
+          onCreateTeam={handleCreateTeam}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </PageWrapper>
   );
 }

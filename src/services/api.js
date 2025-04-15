@@ -4,7 +4,7 @@ import axios from 'axios';
 // Create axios instance with default config
 const api = axios.create({
   // baseURL will be set according to your environment
-  baseURL: import.meta.env.VITE_API_URL || "https://api-production-9e14.up.railway.app/api",
+  baseURL: import.meta.env.VITE_API_URL /*|| "https://api-production-9e14.up.railway.app/api"*/,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -204,6 +204,7 @@ export const userAPI = {
     const response = await api.get('/features/get-user-teams');
     return response.data;
   },
+
   getUserTeamById: async (teamId) => {
     const response = await api.get(`/features/get-user-team-by-id/${teamId}`);
     return response.data;
@@ -211,6 +212,36 @@ export const userAPI = {
 
   getUser: async () => {
     const response = await api.get(`/features/get-user`);
+    return response.data;
+  },
+
+  getUserCredentials: async () => {
+    const response = await api.get(`/features/get-user-credentials`);
+    return response.data;
+  },
+
+  storeUserCredential: async (credentialData) => {
+    const response = await api.post(`/features/store-user-credentials`, {
+      key: credentialData.key,
+      name: credentialData.name,
+      value: credentialData.secret
+    });
+    return response.data;
+  },
+
+  updateUserCredential: async (credentialData) => {
+    const response = await api.post(`/features/update-user-credentials`, {
+      key: credentialData.key,
+      name: credentialData.name,
+      value: credentialData.secret
+    });
+    return response.data;
+  },
+
+  deleteUserCredential: async (credentialData) => {
+    const response = await api.delete(`/features/delete-user-credentials`, {
+      data: credentialData
+    });
     return response.data;
   },
 };
@@ -286,6 +317,97 @@ export const taskAPI = {
   //   });
   //   return response.data;
   // },
+};
+
+// Tool related API calls
+export const toolAPI = {
+  getTools: async () => {
+    const response = await api.get('/features/get-tools');
+    return response.data;
+  },
+  getToolById: async (toolId) => {
+    const response = await api.get(`/features/get-tool-by-id/${toolId}`);
+    return response.data;
+  },
+};
+
+export const agentV2API = {
+  /**
+   * Creates a new Tool Agent or Super Agent
+   * @param {Object} agentData - The agent data object
+   * @param {string} agentData.name - Name of the agent
+   * @param {string} agentData.description - Description of the agent
+   * @param {Array} [agentData.tools] - Array of tools (required for Tool Agent)
+   * @param {Array} [agentData.toolAgents] - Array of tool agent IDs (required for Super Agent)
+   * @param {string} [agentData.prompt] - Custom prompt (optional for Tool Agent)
+   * @param {string} [agentData.character] - Character style for prompt generation (optional for Tool Agent)
+   */
+  createAgent: async (agentData) => {
+    const response = await api.post('/features/create-agent', agentData);
+    return response.data;
+  },
+  
+  /**
+   * Updates an existing Tool Agent or Super Agent
+   * @param {string} agentId - ID of the agent to update
+   * @param {Object} agentData - The agent data object with fields to update
+   * @param {string} [agentData.name] - Updated name
+   * @param {string} [agentData.description] - Updated description
+   * @param {Array} [agentData.tools] - Updated tools array (for Tool Agent)
+   * @param {Array} [agentData.toolAgents] - Updated tool agents array (for Super Agent)
+   * @param {string} [agentData.prompt] - Updated custom prompt (for Tool Agent)
+   */
+  updateAgent: async (agentId, agentData) => {
+    const response = await api.post('/features/update-agent', {
+      agentId,
+      ...agentData
+    });
+    return response.data;
+  },
+  
+  /**
+   * Deletes an agent by ID
+   * @param {string} agentId - ID of the agent to delete
+   */
+  deleteAgent: async (agentId) => {
+    const response = await api.delete('/features/delete-agent', {
+      data: { agentId }
+    });
+    return response.data;
+  },
+  
+  /**
+   * Fetches all agents (both tool agents and super agents) for the authenticated user
+   * @returns {Object} Object containing arrays of toolAgents and superAgents
+   */
+  getUserAgents: async () => {
+    const response = await api.get('/features/get-user-agents');
+    return response.data;
+  },
+
+  /**
+   * Fetches a specific agent by ID
+   * @param {string} agentId - ID of the agent to fetch
+   * @returns {Object} The agent object
+   */
+  getUserAgentById: async (agentId) => {
+    const response = await api.get(`/features/get-user-agent-by-id/${agentId}`);
+    return response.data;
+  },
+
+  /**
+   * Creates a new Tool Agent
+   * @param {Object} agentData - The agent creation data
+   * @param {string} agentData.name - Name of the agent
+   * @param {string} agentData.description - Description of the agent
+   * @param {Array} agentData.tools - Array of tools to assign to the agent
+   * @param {object} agentData.character - Character/personality of the agent
+   * @returns {string} The created agent prompt
+   */  
+  createAgentPrompt: async (promptData) => {
+    const response = await api.post('/features/create-prompt', promptData);
+    return response.data;
+  },  
 };
 
 export default api; 
